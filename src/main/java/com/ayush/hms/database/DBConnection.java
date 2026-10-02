@@ -8,14 +8,15 @@ public class DBConnection {
     private static final String HOST = System.getenv("MYSQLHOST");
     private static final String PORT = System.getenv("MYSQLPORT");
 
-    // Railway MySQL ka actual variable name
-    private static final String DATABASE = System.getenv("MYSQL_DATABASE");
+    // Railway MySQL database
+    private static final String DATABASE = "railway";
 
     private static final String USER = System.getenv("MYSQLUSER");
     private static final String PASSWORD = System.getenv("MYSQLPASSWORD");
 
     private static final String URL =
-            "jdbc:mysql://" + HOST + ":" + PORT + "/" + DATABASE;
+            "jdbc:mysql://" + HOST + ":" + PORT + "/" + DATABASE
+                    + "?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
 
     public static Connection getConnection() {
 
@@ -24,24 +25,45 @@ public class DBConnection {
             System.out.println("===== DATABASE DEBUG =====");
             System.out.println("MYSQLHOST: " + HOST);
             System.out.println("MYSQLPORT: " + PORT);
-            System.out.println("MYSQL_DATABASE: " + DATABASE);
+            System.out.println("DATABASE: " + DATABASE);
             System.out.println("MYSQLUSER: " + USER);
-            System.out.println("MYSQLPASSWORD: " +
-                    (PASSWORD != null && !PASSWORD.isEmpty() ? "SET" : "MISSING"));
+
+            if (PASSWORD != null && !PASSWORD.isEmpty()) {
+                System.out.println("MYSQLPASSWORD: SET");
+            } else {
+                System.out.println("MYSQLPASSWORD: MISSING");
+            }
+
             System.out.println("MYSQL URL: " + URL);
             System.out.println("==========================");
 
-            if (HOST == null || PORT == null ||
-                    DATABASE == null || USER == null || PASSWORD == null) {
-
-                System.out.println("ERROR: MySQL environment variable missing!");
+            if (HOST == null || HOST.isEmpty()) {
+                System.out.println("ERROR: MYSQLHOST missing!");
                 return null;
             }
 
-            Connection connection =
-                    DriverManager.getConnection(URL, USER, PASSWORD);
+            if (PORT == null || PORT.isEmpty()) {
+                System.out.println("ERROR: MYSQLPORT missing!");
+                return null;
+            }
 
-            System.out.println("DATABASE CONNECTED SUCCESSFULLY");
+            if (USER == null || USER.isEmpty()) {
+                System.out.println("ERROR: MYSQLUSER missing!");
+                return null;
+            }
+
+            if (PASSWORD == null || PASSWORD.isEmpty()) {
+                System.out.println("ERROR: MYSQLPASSWORD missing!");
+                return null;
+            }
+
+            Connection connection = DriverManager.getConnection(
+                    URL,
+                    USER,
+                    PASSWORD
+            );
+
+            System.out.println("DATABASE CONNECTED SUCCESSFULLY!");
 
             return connection;
 
