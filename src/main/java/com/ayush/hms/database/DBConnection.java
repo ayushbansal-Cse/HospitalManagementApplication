@@ -7,10 +7,7 @@ public class DBConnection {
 
     private static final String HOST = System.getenv("MYSQLHOST");
     private static final String PORT = System.getenv("MYSQLPORT");
-
-    // Railway MySQL database
     private static final String DATABASE = "railway";
-
     private static final String USER = System.getenv("MYSQLUSER");
     private static final String PASSWORD = System.getenv("MYSQLPASSWORD");
 
@@ -27,13 +24,8 @@ public class DBConnection {
             System.out.println("MYSQLPORT: " + PORT);
             System.out.println("DATABASE: " + DATABASE);
             System.out.println("MYSQLUSER: " + USER);
-
-            if (PASSWORD != null && !PASSWORD.isEmpty()) {
-                System.out.println("MYSQLPASSWORD: SET");
-            } else {
-                System.out.println("MYSQLPASSWORD: MISSING");
-            }
-
+            System.out.println("MYSQLPASSWORD: " +
+                    (PASSWORD != null && !PASSWORD.isEmpty() ? "SET" : "MISSING"));
             System.out.println("MYSQL URL: " + URL);
             System.out.println("==========================");
 
@@ -57,11 +49,8 @@ public class DBConnection {
                 return null;
             }
 
-            Connection connection = DriverManager.getConnection(
-                    URL,
-                    USER,
-                    PASSWORD
-            );
+            Connection connection =
+                    DriverManager.getConnection(URL, USER, PASSWORD);
 
             System.out.println("DATABASE CONNECTED SUCCESSFULLY!");
 
