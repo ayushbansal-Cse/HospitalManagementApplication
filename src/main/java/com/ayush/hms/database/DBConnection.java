@@ -12,32 +12,39 @@ public class DBConnection {
     private static final String PASSWORD = System.getenv("MYSQLPASSWORD");
 
     private static final String URL =
-            "jdbc:mysql://" + HOST + ":" + PORT + "/" + DATABASE;
+            "jdbc:mysql://" + HOST + ":" + PORT + "/" + DATABASE
+                    + "?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
 
     public static Connection getConnection() {
 
-        System.out.println("===== DATABASE DEBUG =====");
-        System.out.println("HOST = " + HOST);
-        System.out.println("PORT = " + PORT);
-        System.out.println("DATABASE = " + DATABASE);
-        System.out.println("USER = " + USER);
-        System.out.println("PASSWORD SET = "
-                + (PASSWORD != null && !PASSWORD.isEmpty()));
-        System.out.println("URL = " + URL);
-        System.out.println("==========================");
-
         try {
+
+            System.out.println("===== DATABASE DEBUG =====");
+            System.out.println("MYSQLHOST: " + HOST);
+            System.out.println("MYSQLPORT: " + PORT);
+            System.out.println("MYSQLDATABASE: " + DATABASE);
+            System.out.println("MYSQLUSER: " + USER);
+            System.out.println("MYSQLPASSWORD: " + (PASSWORD != null ? "SET" : "NULL"));
+            System.out.println("MYSQL URL: jdbc:mysql://" + HOST + ":" + PORT + "/" + DATABASE);
+            System.out.println("==========================");
+
+            if (HOST == null || PORT == null || DATABASE == null
+                    || USER == null || PASSWORD == null) {
+
+                System.out.println("ERROR: MySQL environment variable missing!");
+                return null;
+            }
 
             Connection connection =
                     DriverManager.getConnection(URL, USER, PASSWORD);
 
-            System.out.println("Database connection SUCCESS");
+            System.out.println("DATABASE CONNECTED SUCCESSFULLY!");
 
             return connection;
 
         } catch (Exception e) {
 
-            System.out.println("Connection Failed");
+            System.out.println("DATABASE CONNECTION FAILED!");
             e.printStackTrace();
 
         }
