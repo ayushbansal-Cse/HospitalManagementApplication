@@ -8,9 +8,9 @@ public class DBConnection {
     private static final String URL =
             "jdbc:mysql://localhost:3306/hospital_db";
 
-    private static final String USER = "root";
+    private static final String USER = "";
 
-    private static final String PASSWORD = "bayush1209";
+    private static final String PASSWORD = "";
 
     public static Connection getConnection() {
 

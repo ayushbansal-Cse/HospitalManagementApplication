@@ -16,17 +16,36 @@ public class UserDAO {
 
             Connection con = DBConnection.getConnection();
 
+            if (con == null) {
+                System.out.println("Database connection is NULL");
+                return false;
+            }
+
+            System.out.println("Connected to database");
+
+            System.out.println("Username entered: [" + username + "]");
+            System.out.println("Password entered: [" + password + "]");
+
             PreparedStatement ps = con.prepareStatement(sql);
 
-            ps.setString(1, username);
-            ps.setString(2, password);
+            ps.setString(1, username.trim());
+            ps.setString(2, password.trim());
 
             ResultSet rs = ps.executeQuery();
 
-            return rs.next();
+            if (rs.next()) {
+                System.out.println("User found in database");
+                return true;
+            } else {
+                System.out.println("User NOT found in database");
+                return false;
+            }
 
         } catch (Exception e) {
+
+            System.out.println("Login Error:");
             e.printStackTrace();
+
         }
 
         return false;

@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Doctor | MediCare</title>
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            background:
+                    radial-gradient(
+                            circle at top left,
+                            #172554,
+                            transparent 35%
+                    ),
+
+                    radial-gradient(
+                            circle at bottom right,
+                            #3b0764,
+                            transparent 35%
+                    ),
+
+                    #050816;
+
+            color: white;
+        }
+
+
+        .layout {
+
+            display: flex;
+
+            min-height: 100vh;
+        }
+
+
+        /* ================= SIDEBAR ================= */
+
+        .sidebar {
+
+            width: 250px;
+
+            padding: 30px 20px;
+
+            background:
+                    rgba(10,15,35,0.75);
+
+            backdrop-filter: blur(20px);
+
+            border-right:
+                    1px solid
+                    rgba(255,255,255,0.08);
+        }
+
+
+        .logo {
+
+            font-size: 25px;
+
+            font-weight: bold;
+
+            margin-bottom: 45px;
+        }
+
+
+        .logo span {
+
+            color: #38bdf8;
+        }
+
+
+        .menu-title {
+
+            font-size: 11px;
+
+            color: #64748b;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1.5px;
+
+            margin-bottom: 15px;
+        }
+
+
+        .nav-item {
+
+            display: block;
+
+            padding: 13px 15px;
+
+            margin-bottom: 8px;
+
+            border-radius: 12px;
+
+            color: #94a3b8;
+
+            text-decoration: none;
+
+            transition: 0.3s;
+        }
+
+
+        .nav-item:hover {
+
+            background:
+                    rgba(56,189,248,0.12);
+
+            color: white;
+        }
+
+
+        .nav-item.active {
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            rgba(14,165,233,0.25),
+                            rgba(124,58,237,0.25)
+                    );
+
+            color: white;
+
+            border:
+                    1px solid
+                    rgba(56,189,248,0.2);
+        }
+
+
+        /* ================= MAIN ================= */
+
+        .main {
+
+            flex: 1;
+
+            padding: 35px;
+        }
+
+
+        .topbar {
+
+            margin-bottom: 30px;
+        }
+
+
+        .topbar h1 {
+
+            font-size: 32px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .topbar p {
+
+            color: #94a3b8;
+        }
+
+
+        /* ================= FORM CARD ================= */
+
+        .form-card {
+
+            width: 100%;
+
+            max-width: 750px;
+
+            padding: 30px;
+
+            background:
+                    rgba(15,23,42,0.65);
+
+            border:
+                    1px solid
+                    rgba(255,255,255,0.08);
+
+            backdrop-filter: blur(20px);
+
+            border-radius: 20px;
+
+            box-shadow:
+                    0 20px 50px
+                    rgba(0,0,0,0.25);
+        }
+
+
+        .form-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                    1fr 1fr;
+
+            gap: 22px;
+        }
+
+
+        .form-group {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 8px;
+        }
+
+
+        .full-width {
+
+            grid-column:
+                    1 / -1;
+        }
+
+
+        label {
+
+            font-size: 13px;
+
+            color: #94a3b8;
+
+            font-weight: bold;
+        }
+
+
+        input {
+
+            width: 100%;
+
+            padding: 14px 15px;
+
+            border-radius: 11px;
+
+            border:
+                    1px solid
+                    rgba(255,255,255,0.08);
+
+            outline: none;
+
+            background:
+                    rgba(15,23,42,0.8);
+
+            color: white;
+
+            font-size: 14px;
+        }
+
+
+        input:focus {
+
+            border-color:
+                    rgba(56,189,248,0.6);
+
+            box-shadow:
+                    0 0 0 3px
+                    rgba(56,189,248,0.08);
+        }
+
+
+        input:disabled {
+
+            color: #64748b;
+
+            cursor: not-allowed;
+
+            background:
+                    rgba(15,23,42,0.45);
+        }
+
+
+        .field-note {
+
+            font-size: 11px;
+
+            color: #64748b;
+        }
+
+
+        /* ================= BUTTONS ================= */
+
+        .buttons {
+
+            display: flex;
+
+            justify-content: flex-end;
+
+            gap: 12px;
+
+            margin-top: 30px;
+        }
+
+
+        .cancel-btn {
+
+            padding: 13px 20px;
+
+            border-radius: 11px;
+
+            text-decoration: none;
+
+            color: #cbd5e1;
+
+            border:
+                    1px solid
+                    rgba(255,255,255,0.08);
+
+            background:
+                    rgba(15,23,42,0.65);
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            transition: 0.3s;
+        }
+
+
+        .cancel-btn:hover {
+
+            background:
+                    rgba(255,255,255,0.06);
+        }
+
+
+        .update-btn {
+
+            padding: 13px 22px;
+
+            border: none;
+
+            border-radius: 11px;
+
+            color: white;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            #0ea5e9,
+                            #7c3aed
+                    );
+
+            box-shadow:
+                    0 10px 30px
+                    rgba(14,165,233,0.2);
+
+            transition: 0.3s;
+        }
+
+
+        .update-btn:hover {
+
+            transform:
+                    translateY(-2px);
+        }
+
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+
+                width: 210px;
+            }
+
+            .main {
+
+                padding: 25px;
+            }
+
+            .form-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+            .full-width {
+
+                grid-column: auto;
+            }
+        }
+
+
+        @media (max-width: 600px) {
+
+            .sidebar {
+
+                display: none;
+            }
+
+            .main {
+
+                padding: 20px;
+            }
+
+            .buttons {
+
+                flex-direction: column;
+            }
+
+            .cancel-btn,
+            .update-btn {
+
+                text-align: center;
+
+                width: 100%;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="layout">
+
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+
+        <div class="logo">
+
+            Medi<span>Care</span>
+
+        </div>
+
+
+        <div class="menu-title">
+
+            Main Menu
+
+        </div>
+
+
+        <a href="/dashboard"
+           class="nav-item">
+
+            🏠 Dashboard
+
+        </a>
+
+
+        <a href="/doctors"
+           class="nav-item active">
+
+            👨‍⚕️ Doctors
+
+        </a>
+
+
+        <a href="/patients"
+           class="nav-item">
+
+            🧑‍🤝‍🧑 Patients
+
+        </a>
+
+
+        <a href="/appointments"
+           class="nav-item">
+
+            📅 Appointments
+
+        </a>
+
+
+    </aside>
+
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="main">
+
+
+        <div class="topbar">
+
+            <h1>
+                Edit Doctor
+            </h1>
+
+            <p>
+                Update doctor information
+            </p>
+
+        </div>
+
+
+
+        <!-- ================= FORM ================= -->
+
+        <div class="form-card">
+
+
+            <form
+                    action="/doctors/update"
+                    method="post">
+
+
+                <!-- Doctor ID -->
+
+                <input
+                        type="hidden"
+                        name="id"
+                        th:value="${doctor.id}"
+                >
+
+
+                <div class="form-grid">
+
+
+                    <!-- Doctor Name -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Doctor Name
+                        </label>
+
+                        <input
+                                type="text"
+                                th:value="${doctor.name}"
+                                disabled
+                        >
+
+                        <span class="field-note">
+                            Doctor name cannot be changed here
+                        </span>
+
+                    </div>
+
+
+
+                    <!-- Experience -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Experience
+                        </label>
+
+                        <input
+                                type="text"
+                                th:value="${doctor.experience}"
+                                disabled
+                        >
+
+                        <span class="field-note">
+                            Experience cannot be changed here
+                        </span>
+
+                    </div>
+
+
+
+                    <!-- Specialization -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Specialization
+                        </label>
+
+                        <input
+                                type="text"
+                                name="specialization"
+                                th:value="${doctor.specialization}"
+                                placeholder="e.g. Cardiology"
+                                required
+                        >
+
+                    </div>
+
+
+
+                    <!-- Phone -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Phone Number
+                        </label>
+
+                        <input
+                                type="text"
+                                name="phone"
+                                th:value="${doctor.phone}"
+                                placeholder="Enter phone number"
+                                required
+                        >
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- ================= BUTTONS ================= -->
+
+                <div class="buttons">
+
+
+                    <a
+                            href="/doctors"
+                            class="cancel-btn">
+
+                        Cancel
+
+                    </a>
+
+
+                    <button
+                            type="submit"
+                            class="update-btn">
+
+                        ✓ Update Doctor
+
+                    </button>
+
+
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
+
+</body>
+
+</html>

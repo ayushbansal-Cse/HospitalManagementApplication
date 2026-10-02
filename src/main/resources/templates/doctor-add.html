@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>MediCare HMS - Add Doctor</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+
+            min-height: 100vh;
+
+            color: white;
+
+            background:
+                    radial-gradient(
+                            circle at 10% 20%,
+                            rgba(0, 180, 255, 0.15),
+                            transparent 30%
+                    ),
+
+                    radial-gradient(
+                            circle at 90% 80%,
+                            rgba(120, 60, 255, 0.18),
+                            transparent 30%
+                    ),
+
+                    #070b14;
+        }
+
+        .layout {
+
+            display: flex;
+
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+
+            width: 250px;
+
+            padding: 30px 20px;
+
+            background:
+                    rgba(10, 15, 28, 0.85);
+
+            border-right:
+                    1px solid
+                    rgba(255,255,255,0.08);
+
+            backdrop-filter: blur(20px);
+        }
+
+        .logo {
+
+            font-size: 25px;
+
+            font-weight: bold;
+
+            margin-bottom: 45px;
+        }
+
+        .logo span {
+
+            color: #38bdf8;
+        }
+
+        .menu-title {
+
+            font-size: 12px;
+
+            color: #64748b;
+
+            margin-bottom: 15px;
+
+            text-transform: uppercase;
+        }
+
+        .menu {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 10px;
+        }
+
+        .menu a {
+
+            text-decoration: none;
+
+            color: #94a3b8;
+
+            padding: 14px 16px;
+
+            border-radius: 12px;
+
+            transition: 0.3s;
+        }
+
+        .menu a:hover,
+        .menu a.active {
+
+            color: white;
+
+            background:
+                    linear-gradient(
+                            90deg,
+                            rgba(14,165,233,0.25),
+                            rgba(124,58,237,0.20)
+                    );
+
+            border:
+                    1px solid
+                    rgba(56,189,248,0.15);
+        }
+
+        .logout {
+
+            margin-top: 40px;
+
+            color: #f87171 !important;
+        }
+
+        /* MAIN */
+
+        .main {
+
+            flex: 1;
+
+            padding: 35px;
+
+            display: flex;
+
+            flex-direction: column;
+        }
+
+        .topbar {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 35px;
+        }
+
+        .topbar h1 {
+
+            font-size: 30px;
+
+            margin-bottom: 8px;
+        }
+
+        .topbar p {
+
+            color: #64748b;
+        }
+
+        .back-btn {
+
+            text-decoration: none;
+
+            color: #cbd5e1;
+
+            padding: 12px 18px;
+
+            border-radius: 10px;
+
+            border:
+                    1px solid
+                    rgba(255,255,255,0.08);
+
+            background:
+                    rgba(255,255,255,0.04);
+
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+
+            color: white;
+
+            border-color:
+                    rgba(56,189,248,0.3);
+        }
+
+        /* FORM PANEL */
+
+        .form-panel {
+
+            width: 100%;
+
+            max-width: 800px;
+
+            padding: 30px;
+
+            border-radius: 20px;
+
+            background:
+                    rgba(15,23,42,0.65);
+
+            border:
+                    1px solid
+                    rgba(255,255,255,0.08);
+
+            backdrop-filter: blur(15px);
+        }
+
+        .form-title {
+
+            font-size: 20px;
+
+            margin-bottom: 25px;
+        }
+
+        .form-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                    repeat(2, 1fr);
+
+            gap: 20px;
+        }
+
+        .form-group {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 8px;
+        }
+
+        .form-group.full {
+
+            grid-column: span 2;
+        }
+
+        label {
+
+            font-size: 13px;
+
+            color: #94a3b8;
+        }
+
+        input {
+
+            width: 100%;
+
+            padding: 14px 15px;
+
+            border-radius: 10px;
+
+            outline: none;
+
+            color: white;
+
+            background:
+                    rgba(255,255,255,0.04);
+
+            border:
+                    1px solid
+                    rgba(255,255,255,0.08);
+
+            font-size: 14px;
+
+            transition: 0.3s;
+        }
+
+        input:focus {
+
+            border-color: #38bdf8;
+
+            background:
+                    rgba(56,189,248,0.06);
+        }
+
+        input::placeholder {
+
+            color: #475569;
+        }
+
+        .error {
+
+            margin-top: 20px;
+
+            padding: 12px 15px;
+
+            border-radius: 10px;
+
+            color: #fca5a5;
+
+            background:
+                    rgba(239,68,68,0.10);
+
+            border:
+                    1px solid
+                    rgba(239,68,68,0.20);
+        }
+
+        .buttons {
+
+            display: flex;
+
+            justify-content: flex-end;
+
+            gap: 12px;
+
+            margin-top: 30px;
+        }
+
+        .cancel-btn {
+
+            text-decoration: none;
+
+            color: #cbd5e1;
+
+            padding: 13px 22px;
+
+            border-radius: 10px;
+
+            background:
+                    rgba(255,255,255,0.05);
+
+            border:
+                    1px solid
+                    rgba(255,255,255,0.08);
+        }
+
+        .save-btn {
+
+            border: none;
+
+            cursor: pointer;
+
+            color: white;
+
+            padding: 13px 25px;
+
+            border-radius: 10px;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            #06b6d4,
+                            #7c3aed
+                    );
+
+            transition: 0.3s;
+        }
+
+        .save-btn:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                    0 8px 25px
+                    rgba(56,189,248,0.20);
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+
+                display: none;
+            }
+
+            .main {
+
+                padding: 20px;
+            }
+
+            .form-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+
+                grid-column: span 1;
+            }
+
+            .topbar {
+
+                align-items: flex-start;
+
+                gap: 15px;
+
+                flex-direction: column;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="layout">
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            Medi<span>Care</span>
+
+        </div>
+
+
+        <div class="menu-title">
+
+            Main Menu
+
+        </div>
+
+
+        <nav class="menu">
+
+            <a href="/dashboard">
+
+                🏠 Dashboard
+
+            </a>
+
+            <a href="/doctors"
+               class="active">
+
+                👨‍⚕️ Doctors
+
+            </a>
+
+            <a href="/patients">
+
+                🧑‍🤝‍🧑 Patients
+
+            </a>
+
+            <a href="#">
+
+                📅 Appointments
+
+            </a>
+
+        </nav>
+
+
+        <nav class="menu">
+
+            <a href="#"
+               class="logout">
+
+                🚪 Logout
+
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+
+        <!-- TOPBAR -->
+
+        <div class="topbar">
+
+            <div>
+
+                <h1>
+
+                    Add Doctor
+
+                </h1>
+
+                <p>
+
+                    Add a new doctor to MediCare Hospital
+
+                </p>
+
+            </div>
+
+
+            <a href="/doctors"
+               class="back-btn">
+
+                ← Back to Doctors
+
+            </a>
+
+        </div>
+
+
+        <!-- FORM -->
+
+        <div class="form-panel">
+
+
+            <div class="form-title">
+
+                Doctor Information
+
+            </div>
+
+
+            <form action="/doctors/add"
+                  method="post">
+
+
+                <div class="form-grid">
+
+
+                    <!-- NAME -->
+
+                    <div class="form-group">
+
+                        <label>
+
+                            Doctor Name
+
+                        </label>
+
+                        <input
+                                type="text"
+                                name="name"
+                                placeholder="Enter doctor name"
+                                required>
+
+                    </div>
+
+
+                    <!-- SPECIALIZATION -->
+
+                    <div class="form-group">
+
+                        <label>
+
+                            Specialization
+
+                        </label>
+
+                        <input
+                                type="text"
+                                name="specialization"
+                                placeholder="e.g. Cardiology"
+                                required>
+
+                    </div>
+
+
+                    <!-- EXPERIENCE -->
+
+                    <div class="form-group">
+
+                        <label>
+
+                            Experience
+
+                        </label>
+
+                        <input
+                                type="text"
+                                name="experience"
+                                placeholder="e.g. 5 Years"
+                                required>
+
+                    </div>
+
+
+                    <!-- PHONE -->
+
+                    <div class="form-group">
+
+                        <label>
+
+                            Phone Number
+
+                        </label>
+
+                        <input
+                                type="text"
+                                name="phone"
+                                placeholder="Enter phone number"
+                                required>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- ERROR -->
+
+                <div class="error"
+                     th:if="${error}"
+                     th:text="${error}">
+
+                </div>
+
+
+                <!-- BUTTONS -->
+
+                <div class="buttons">
+
+
+                    <a href="/doctors"
+                       class="cancel-btn">
+
+                        Cancel
+
+                    </a>
+
+
+                    <button
+                            type="submit"
+                            class="save-btn">
+
+                        Save Doctor
+
+                    </button>
+
+
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
+
+</body>
+
+</html>
