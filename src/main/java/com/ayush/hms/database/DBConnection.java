@@ -19,7 +19,7 @@ public class DBConnection {
 
         try {
 
-            System.out.println("===== DATABASE DEBUG =====");
+            System.out.println("===== NEW DB CODE 2026 =====");
             System.out.println("MYSQLHOST: " + HOST);
             System.out.println("MYSQLPORT: " + PORT);
             System.out.println("DATABASE: " + DATABASE);
