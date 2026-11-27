@@ -7,7 +7,7 @@ public class DBConnection {
 
     private static final String HOST = System.getenv("MYSQLHOST");
     private static final String PORT = System.getenv("MYSQLPORT");
-    private static final String DATABASE = "railway";
+    private static final String DATABASE = System.getenv("MYSQLDATABASE");
     private static final String USER = System.getenv("MYSQLUSER");
     private static final String PASSWORD = System.getenv("MYSQLPASSWORD");
 
